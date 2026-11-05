@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Encapsulation • Pratyaksha Coding Academy</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+      :root {
+        --navy: #1b365d;
+        --blue: #2563eb;
+        --ink: #152c49;
+        --light: #eff6ff;
+        --border: #d7e3f3;
+        --green: #15803d;
+        --red: #b91c1c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #0e2139;
+        color: var(--ink);
+        font-family: Montserrat, sans-serif;
+      }
+      .wrap {
+        max-width: 1280px;
+        margin: 12px auto;
+        padding: 0 12px;
+      }
+      .deck {
+        height: calc(100dvh - 90px);
+        min-height: 520px;
+        max-height: 760px;
+        display: flex;
+        flex-direction: column;
+        border: 2px solid #3b82f6;
+        border-radius: 19px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 18px 45px #0005;
+      }
+      header {
+        height: 70px;
+        flex: none;
+        background: var(--navy);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 9px 22px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+      }
+      .brand img {
+        height: 48px;
+        width: 48px;
+        object-fit: contain;
+        background: white;
+        border-radius: 9px;
+        padding: 3px;
+      }
+      .brand b {
+        font-size: 15px;
+      }
+      .brand small {
+        display: block;
+        color: #bfdbfe;
+        font-size: 11px;
+        margin-top: 4px;
+      }
+      .headerRight {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      select {
+        border: 0;
+        border-radius: 9px;
+        padding: 9px;
+        font-family: inherit;
+        font-weight: 700;
+        max-width: 180px;
+      }
+      #count {
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .slide {
+        display: none;
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        padding: 27px 40px;
+      }
+      .slide.active {
+        display: block;
+      }
+      .tag {
+        display: inline-block;
+        background: #dbeafe;
+        color: #1d4ed8;
+        border-radius: 7px;
+        padding: 6px 11px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      h1 {
+        font-size: 39px;
+        margin: 16px 0;
+      }
+      h2 {
+        font-size: 28px;
+        margin: 10px 0;
+      }
+      h3 {
+        font-size: 17px;
+        margin: 0 0 14px;
+      }
+      .lead {
+        font-size: 15px;
+        line-height: 1.65;
+        color: #52657b;
+        margin: 7px 0 20px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .box {
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 21px;
+        background: #f8fbff;
+      }
+      .white {
+        background: white;
+      }
+      .box p {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .btn {
+        border: 0;
+        border-radius: 10px;
+        padding: 12px 17px;
+        background: var(--blue);
+        color: white;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .btn.alt {
+        background: #e8f0ff;
+        color: #19457d;
+      }
+      .btn.danger {
+        background: #b91c1c;
+      }
+      .btn:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      .choice {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: white;
+        border: 2px solid #cddbf0;
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin: 8px 0;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ink);
+        cursor: pointer;
+      }
+      .choice.good {
+        background: #dcfce7;
+        border-color: #16a34a;
+      }
+      .choice.bad {
+        background: #fee2e2;
+        border-color: #dc2626;
+      }
+      .feedback {
+        border-radius: 10px;
+        background: #e7f0ff;
+        color: #1b365d;
+        padding: 12px 14px;
+        font-size: 13px;
+        line-height: 1.5;
+        font-weight: 700;
+        min-height: 42px;
+        margin-top: 13px;
+      }
+      .feedback.good {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .feedback.bad {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .code {
+        font:
+          14px/1.75 "Fira Code",
+          monospace;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        background: #11233c;
+        color: #e2edff;
+        border-radius: 12px;
+        padding: 17px;
+        margin: 10px 0;
+      }
+      .code .hl {
+        background: #325b92;
+        color: white;
+        border-radius: 4px;
+      }
+      .balance {
+        font-size: 40px;
+        font-weight: 800;
+        color: #1b365d;
+        margin: 15px 0;
+      }
+      .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: #5c7390;
+        letter-spacing: 0.5px;
+      }
+      .note {
+        border-left: 4px solid var(--blue);
+        background: #eff6ff;
+        border-radius: 0 9px 9px 0;
+        padding: 12px 16px;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 14px;
+      }
+      .input {
+        padding: 12px 14px;
+        border: 2px solid #cbd5e1;
+        border-radius: 10px;
+        width: 130px;
+        font:
+          16px "Fira Code",
+          monospace;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        color: #fff;
+      }
+      .nav button {
+        border: 2px solid #60a5fa;
+        border-radius: 10px;
+        background: #1b365d;
+        color: white;
+        padding: 11px 23px;
+        font-family: inherit;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .nav button:disabled {
+        opacity: 0.4;
+      }
+      .nav small {
+        font-size: 12px;
+      }
+      .hero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100%;
+        text-align: center;
+      }
+      .heroInner {
+        max-width: 730px;
+      }
+      .atm {
+        max-width: 430px;
+        margin: auto;
+        border: 5px solid #214e80;
+        border-radius: 23px;
+        padding: 18px;
+        background: #e7f0ff;
+        box-shadow: inset 0 -8px #d2e2f6;
+      }
+      .screen {
+        border: 3px solid #89b2e5;
+        border-radius: 12px;
+        background: white;
+        padding: 15px;
+        text-align: center;
+      }
+      .screen .balance {
+        font-size: 36px;
+      }
+      .small {
+        font-size: 12px;
+        color: #64748b;
+      }
+      .step {
+        display: inline-block;
+        background: #dbeafe;
+        color: #1d4ed8;
+        border-radius: 50%;
+        height: 28px;
+        width: 28px;
+        text-align: center;
+        line-height: 28px;
+        font-weight: 800;
+        margin-right: 8px;
+      }
+      .mission {
+        background: #eff6ff;
+        border: 2px solid #bfdbfe;
+        border-radius: 14px;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      .output {
+        font:
+          15px/1.7 "Fira Code",
+          monospace;
+        background: white;
+        border: 2px dashed #93c5fd;
+        border-radius: 10px;
+        padding: 15px;
+        min-height: 55px;
+        white-space: pre-wrap;
+      }
+      .hidden {
+        display: none !important;
+      }
+      @media (max-width: 750px) {
+        .deck {
+          height: calc(100dvh - 85px);
+        }
+        header {
+          padding: 8px 10px;
+        }
+        .brand img {
+          width: 36px;
+          height: 36px;
+        }
+        .brand b {
+          font-size: 11px;
+        }
+        .brand small {
+          font-size: 9px;
+        }
+        #count {
+          display: none;
+        }
+        select {
+          max-width: 120px;
+        }
+        .slide {
+          padding: 18px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 30px;
+        }
+        h2 {
+          font-size: 23px;
+        }
+        .nav small {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <main class="deck">
+        <header>
+          <div class="brand">
+            <img src="/logooutcut.png" alt="Pratyaksha Coding Academy logo" />
+            <div>
+              <b>Pratyaksha Coding Academy</b
+              ><small>Python OOP • Encapsulation</small>
+            </div>
+          </div>
+          <div class="headerRight">
+            <span id="count">Slide 1 / 7</span
+            ><select
+              id="jump"
+              aria-label="Choose slide"
+              onchange="go(+this.value)"
+            >
+              <option value="1">1. Welcome</option>
+              <option value="2">2. The Problem</option>
+              <option value="3">3. The Solution</option>
+              <option value="4">4. Encapsulation</option>
+              <option value="5">5. Python Code</option>
+              <option value="6">6. Debugging</option>
+              <option value="7">7. Your Turn</option>
+            </select>
+          </div>
+        </header>
+        <section class="slide active">
+          <div class="hero">
+            <div class="heroInner">
+              <span class="tag">Python • Object-Oriented Programming</span>
+              <h1>Encapsulation</h1>
+              <p class="lead" style="font-size: 19px">
+                How do we stop important data from being changed incorrectly?
+              </p>
+              <div
+                class="box white"
+                style="max-width: 460px; margin: 25px auto"
+              >
+                <div style="font-size: 70px">🏧</div>
+                <h3>Today's example: A Bank Account</h3>
+                <p>First, discover a problem. Then build a safer solution.</p>
+              </div>
+              <button class="btn" onclick="next()">Start Exploring →</button>
+            </div>
+          </div>
+        </section>
+        <section class="slide">
+          <span class="tag">1 • Discover the problem</span>
+          <h2>What if anyone could change the balance?</h2>
+          <p class="lead">
+            A bank account starts with ₹5,000. Imagine there are
+            <strong>no rules</strong> for changing its balance.
+          </p>
+          <div class="grid">
+            <div class="box">
+              <h3>Unprotected Account</h3>
+              <div class="label">Account balance</div>
+              <div class="balance" id="unsafeBalance">₹5,000</div>
+              <div class="row">
+                <button class="btn danger" onclick="unsafeSet(-500)">
+                  Set to −₹500</button
+                ><button class="btn alt" onclick="unsafeSet(999999)">
+                  Set to ₹9,99,999</button
+                ><button class="btn alt" onclick="unsafeSet(5000)">
+                  Reset
+                </button>
+              </div>
+              <div class="feedback" id="unsafeFeedback">
+                Try changing the balance directly.
+              </div>
+            </div>
+            <div class="box white">
+              <h3>Think: What's the problem?</h3>
+              <p>
+                Someone can replace the balance with any number, even an invalid
+                one.
+              </p>
+              <button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'The problem is not the screen. It is that there are no checks.',
+                  )
+                "
+              >
+                The ATM screen is too small.</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    true,
+                    'Exactly! Without rules, the balance can become invalid.',
+                  )
+                "
+              >
+                Anyone can set an invalid balance.</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'A bigger number is not the main problem. Missing checks are.',
+                  )
+                "
+              >
+                The balance should always be bigger.
+              </button>
+              <div class="feedback">Choose the biggest problem.</div>
+            </div>
+          </div>
+          <div class="note">
+            <strong>Key question:</strong> How can we allow useful actions
+            without allowing random changes?
+          </div>
+        </section>
+        <section class="slide">
+          <span class="tag">2 • Find a solution</span>
+          <h2>What if we control the actions?</h2>
+          <p class="lead">
+            Instead of changing the balance directly, the customer uses
+            <strong>Deposit</strong> and <strong>Withdraw</strong>. The ATM
+            checks each request.
+          </p>
+          <div class="grid">
+            <div class="box">
+              <div class="atm">
+                <div class="screen">
+                  <div class="label">Available balance</div>
+                  <div class="balance" id="atmBalance">₹5,000</div>
+                  <div class="small">Enter an amount and choose an action</div>
+                </div>
+                <div
+                  class="row"
+                  style="justify-content: center; margin-top: 16px"
+                >
+                  <input
+                    class="input"
+                    type="number"
+                    id="atmAmount"
+                    value="1000"
+                    step="100"
+                    aria-label="Amount"
+                  /><button class="btn" onclick="transaction('deposit')">
+                    Deposit</button
+                  ><button class="btn alt" onclick="transaction('withdraw')">
+                    Withdraw
+                  </button>
+                </div>
+                <div
+                  class="row"
+                  style="justify-content: center; margin-top: 10px"
+                >
+                  <button class="btn alt" onclick="resetATM()">
+                    Reset ATM
+                  </button>
+                </div>
+              </div>
+              <div class="feedback" id="atmFeedback">
+                Try Deposit ₹1,000, then Withdraw ₹1,000. Also test an amount
+                bigger than the balance.
+              </div>
+            </div>
+            <div class="box white">
+              <h3>What changed?</h3>
+              <div class="mission">
+                <strong>Before:</strong> Anyone could replace the balance.<br /><strong
+                  >Now:</strong
+                >
+                The ATM checks requests before changing it.
+              </div>
+              <h3 style="margin-top: 20px">Quick Check</h3>
+              <p>Balance: ₹5,000. What should happen if you withdraw ₹7,000?</p>
+              <button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'That would make the balance negative. The request should be rejected.',
+                  )
+                "
+              >
+                Balance becomes −₹2,000</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    true,
+                    'Correct! The ATM should reject a withdrawal larger than the balance.',
+                  )
+                "
+              >
+                The withdrawal is rejected</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'The ATM should not give more money than the account contains.',
+                  )
+                "
+              >
+                Balance becomes ₹12,000
+              </button>
+              <div class="feedback">Choose the safe action.</div>
+            </div>
+          </div>
+        </section>
+        <section class="slide">
+          <span class="tag">3 • Understand</span>
+          <h2>This idea is called Encapsulation</h2>
+          <p class="lead">
+            We keep the <strong>balance</strong> and the
+            <strong>methods that work with it</strong> together in one class.
+            The methods control changes.
+          </p>
+          <div class="grid">
+            <div class="box">
+              <h3>Inside a BankAccount object</h3>
+              <div class="box white" style="border-color: #93c5fd">
+                <div class="label">Data • Kept inside</div>
+                <div class="balance" style="font-size: 25px">__balance</div>
+                <hr
+                  style="
+                    border: 0;
+                    border-top: 2px solid #e2e8f0;
+                    margin: 17px 0;
+                  "
+                />
+                <div class="label">Methods • Allowed actions</div>
+                <div class="row" style="margin-top: 10px">
+                  <span class="tag">deposit()</span
+                  ><span class="tag">withdraw()</span
+                  ><span class="tag">check_balance()</span>
+                </div>
+              </div>
+            </div>
+            <div class="box white">
+              <h3>Check Your Understanding</h3>
+              <p>Why do we use methods to update the balance?</p>
+              <button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    true,
+                    'Correct! Methods can reject invalid deposits and withdrawals.',
+                  )
+                "
+              >
+                To check the amount before changing data</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'Methods are not used just to make code shorter.',
+                  )
+                "
+              >
+                Only to make the code shorter</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'The goal is controlled access, not hiding the whole program.',
+                  )
+                "
+              >
+                To hide the entire program from users
+              </button>
+              <div class="feedback">Choose an answer.</div>
+            </div>
+          </div>
+          <div class="note">
+            <strong>Encapsulation:</strong> Grouping data and methods in a
+            class, with controlled access to the data.
+          </div>
+        </section>
+        <section class="slide">
+          <span class="tag">4 • Connect to Python</span>
+          <h2>Now let's see the Python code</h2>
+          <p class="lead">
+            Click an action. See which method runs and how the balance changes.
+          </p>
+          <div class="grid">
+            <div class="box">
+              <h3>BankAccount Class</h3>
+              <div class="code" id="pythonCode"></div>
+              <div class="note">
+                The double underscore in <code>__balance</code> triggers Python
+                <strong>name mangling</strong>. It discourages accidental direct
+                access, but is not absolute security.
+              </div>
+            </div>
+            <div class="box white">
+              <h3>Try the methods</h3>
+              <div class="label">Balance</div>
+              <div class="balance" id="codeBalance">₹5,000</div>
+              <div class="row">
+                <button class="btn" onclick="codeAction('deposit')">
+                  Deposit ₹1,000</button
+                ><button class="btn alt" onclick="codeAction('withdraw')">
+                  Withdraw ₹2,000</button
+                ><button class="btn alt" onclick="codeAction('check')">
+                  Check Balance</button
+                ><button class="btn alt" onclick="codeAction('reset')">
+                  Reset
+                </button>
+              </div>
+              <div class="feedback" id="codeFeedback">
+                Click a method to see it highlighted.
+              </div>
+              <h3 style="margin-top: 19px">Quick Check</h3>
+              <p>Which method should be used to take money out?</p>
+              <button
+                class="choice"
+                onclick="
+                  pick(this, false, 'deposit() adds money, not removes it.')
+                "
+              >
+                deposit()</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    true,
+                    'Correct! withdraw() checks and removes an allowed amount.',
+                  )
+                "
+              >
+                withdraw()</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(this, false, 'check_balance() only reads the balance.')
+                "
+              >
+                check_balance()
+              </button>
+              <div class="feedback">Choose a method.</div>
+            </div>
+          </div>
+        </section>
+        <section class="slide">
+          <span class="tag">5 • Analyze and evaluate</span>
+          <h2>Find the Bug</h2>
+          <p class="lead">
+            A student wrote a withdrawal method, but it allows the account
+            balance to go below zero.
+          </p>
+          <div class="grid">
+            <div class="box">
+              <h3>Buggy Method</h3>
+              <div class="code">
+                def withdraw(self, amount): self.__balance -= amount
+              </div>
+              <div class="mission">
+                <strong>Balance:</strong> ₹500<br /><strong>Withdraw:</strong>
+                ₹800<br /><strong>Result:</strong> −₹300 ❌
+              </div>
+            </div>
+            <div class="box white">
+              <h3>Which fix is correct?</h3>
+              <button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'Checking only that the amount is positive still allows overdrawing the account.',
+                  )
+                "
+              >
+                if amount &gt; 0:<br />
+                &nbsp; self.__balance -= amount</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    true,
+                    'Correct! The amount must be positive and no more than the available balance.',
+                  )
+                "
+              >
+                if 0 &lt; amount &lt;= self.__balance:<br />
+                &nbsp; self.__balance -= amount</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'That would add the money instead of withdrawing it.',
+                  )
+                "
+              >
+                self.__balance += amount
+              </button>
+              <div class="feedback">Select the safe correction.</div>
+            </div>
+          </div>
+          <div class="note">
+            Methods are useful because we can put checks in
+            <strong>one place</strong> before the data changes.
+          </div>
+        </section>
+        <section class="slide">
+          <span class="tag">6 • Apply</span>
+          <h2>Your Turn: Protect Student Marks</h2>
+          <p class="lead">
+            A student's marks must be between <strong>0 and 100</strong>. Which
+            design protects the data?
+          </p>
+          <div class="grid">
+            <div class="box">
+              <h3>Your Mission</h3>
+              <div class="mission">
+                Create a <strong>Student</strong> class with internal
+                <strong>__marks</strong> and a method that checks the new value
+                before saving it.
+              </div>
+              <div class="code">
+                class Student: def __init__(self): self.__marks = 0 def
+                set_marks(self, marks): # What condition belongs here?
+              </div>
+            </div>
+            <div class="box white">
+              <h3>Choose the Condition</h3>
+              <button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    false,
+                    'This would accept 150, which is not a valid mark.',
+                  )
+                "
+              >
+                if marks &gt;= 0:</button
+              ><button
+                class="choice"
+                onclick="
+                  pick(
+                    this,
+                    true,
+                    'Correct! This allows only marks from 0 through 100.',
+                  )
+                "
+              >
+                if 0 &lt;= marks &lt;= 100:</button
+              ><button
+                class="choice"
+                onclick="pick(this, false, 'This would accept negative marks.')"
+              >
+                if marks &lt;= 100:
+              </button>
+              <div class="feedback">Choose an answer.</div>
+              <button class="btn" style="margin-top: 16px" onclick="finish()">
+                Finish Lesson ✦
+              </button>
+              <div class="feedback hidden" id="finishMsg">
+                Lesson complete! You discovered why controlled access matters.
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <div class="nav">
+        <button id="prev" onclick="go(current - 1)">← Previous</button
+        ><small>Pratyaksha Coding Academy • Encapsulation</small
+        ><button id="next" onclick="next()">Next →</button>
+      </div>
+    </div>
+    <script>
+      let current = 1,
+        unsafe = 5000,
+        atm = 5000,
+        bank = 5000;
+      const fmt = (n) => "₹" + n.toLocaleString("en-IN");
+      function go(n) {
+        if (n < 1 || n > 7) return;
+        current = n;
+        document.querySelectorAll(".slide").forEach((s, i) => {
+          s.classList.toggle("active", i === n - 1);
+          if (i === n - 1) s.scrollTop = 0;
+        });
+        document.getElementById("count").textContent = `Slide ${n} / 7`;
+        document.getElementById("jump").value = n;
+        document.getElementById("prev").disabled = n === 1;
+        document.getElementById("next").disabled = n === 7;
+      }
+      function next() {
+        go(current + 1);
+      }
+      function pick(el, correct, message) {
+        const parent = el.parentElement;
+        parent
+          .querySelectorAll(".choice")
+          .forEach((x) => x.classList.remove("good", "bad"));
+        el.classList.add(correct ? "good" : "bad");
+        const f = parent.querySelector(".feedback");
+        f.textContent = message;
+        f.className = "feedback " + (correct ? "good" : "bad");
+        if (correct) burst(35);
+      }
+      function burst(n = 100) {
+        if (typeof confetti === "function")
+          confetti({ particleCount: n, spread: 65, origin: { y: 0.7 } });
+      }
+      function unsafeSet(n) {
+        unsafe = n;
+        document.getElementById("unsafeBalance").textContent = fmt(n);
+        document.getElementById("unsafeFeedback").textContent =
+          n === 5000
+            ? "Balance reset."
+            : "The balance changed instantly, without checking if the value is valid!";
+        document.getElementById("unsafeFeedback").className =
+          "feedback " + (n === 5000 ? "" : "bad");
+      }
+      function transaction(type) {
+        const val = Number(document.getElementById("atmAmount").value),
+          f = document.getElementById("atmFeedback");
+        let msg,
+          ok = false;
+        if (!Number.isFinite(val) || val <= 0) {
+          msg = "Rejected: enter an amount greater than zero.";
+        } else if (type === "withdraw" && val > atm) {
+          msg = "Rejected: not enough money in the account.";
+        } else {
+          atm += type === "deposit" ? val : -val;
+          msg =
+            (type === "deposit" ? "Deposit" : "Withdrawal") +
+            " successful! New balance: " +
+            fmt(atm);
+          ok = true;
+        }
+        document.getElementById("atmBalance").textContent = fmt(atm);
+        f.textContent = msg;
+        f.className = "feedback " + (ok ? "good" : "bad");
+      }
+      function resetATM() {
+        atm = 5000;
+        document.getElementById("atmBalance").textContent = fmt(atm);
+        const f = document.getElementById("atmFeedback");
+        f.textContent = "ATM reset. Try both Deposit and Withdraw.";
+        f.className = "feedback";
+      }
+      const codeLines = [
+        "class BankAccount:",
+        "    def __init__(self):",
+        "        self.__balance = 5000",
+        "",
+        "    def check_balance(self):",
+        "        return self.__balance",
+        "",
+        "    def deposit(self, amount):",
+        "        if amount > 0:",
+        "            self.__balance += amount",
+        "",
+        "    def withdraw(self, amount):",
+        "        if 0 < amount <= self.__balance:",
+        "            self.__balance -= amount",
+      ];
+      function drawCode(active = "") {
+        let a = -1,
+          b = -1;
+        if (active === "check") {
+          a = 4;
+          b = 5;
+        } else if (active === "deposit") {
+          a = 7;
+          b = 9;
+        } else if (active === "withdraw") {
+          a = 11;
+          b = 13;
+        }
+        document.getElementById("pythonCode").innerHTML = codeLines
+          .map((line, i) =>
+            i >= a && a !== -1 && i <= b
+              ? '<span class="hl">' + escapeHTML(line) + "</span>"
+              : escapeHTML(line),
+          )
+          .join("\n");
+      }
+      function escapeHTML(s) {
+        return s
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+      }
+      function codeAction(action) {
+        const f = document.getElementById("codeFeedback");
+        if (action === "reset") {
+          bank = 5000;
+          drawCode();
+          f.textContent = "Account reset to ₹5,000.";
+        } else if (action === "deposit") {
+          bank += 1000;
+          drawCode("deposit");
+          f.textContent = "deposit(1000) checked the amount and added ₹1,000.";
+        } else if (action === "withdraw") {
+          drawCode("withdraw");
+          if (bank >= 2000) {
+            bank -= 2000;
+            f.textContent =
+              "withdraw(2000) checked the balance and removed ₹2,000.";
+          } else {
+            f.textContent = "Withdrawal rejected: insufficient balance.";
+          }
+        } else {
+          drawCode("check");
+          f.textContent =
+            "check_balance() returned " + fmt(bank) + " without changing it.";
+        }
+        document.getElementById("codeBalance").textContent = fmt(bank);
+        f.className =
+          "feedback " + (action === "withdraw" && bank < 0 ? "bad" : "good");
+      }
+      function finish() {
+        document.getElementById("finishMsg").classList.remove("hidden");
+        burst(150);
+      }
+      drawCode();
+      go(1);
+    </script>
+  </body>
+</html>
